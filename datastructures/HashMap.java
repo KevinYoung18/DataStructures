@@ -26,42 +26,88 @@ public class HashMap<K, V> implements Hashtable<K, V>
 	{
 		Pair<K, V> pair = new Pair<K, V>(key, value);
 		V oldValue = null;
+		LinkedList<Pair<K,V>> list = hashtable[hash(key)];
 		
-		if(hashtable[hash(key)] == null)
+		//create list if none exists at this index
+		if(list == null) 
 		{
-			hashtable[hash(key)] = new LinkedList<Pair<K,V>>();
-			
+			list = new LinkedList<Pair<K,V>>();
 		}
 		else
 		{
-			LinkedList<Pair<K,V>> list = hashtable[hash(key)];
+			//if there is a matching key in this list
 			if(list.contains(pair))
 			{
 				int index = list.indexOf(pair);
 				oldValue = list.get(index).getValue();
 				list.remove(index);
-				list.add(pair);
+			}
+			else 
+			{
+				size++;
 			}
 		}
+		list.add(pair);//add pair to list
+		
 		
 		return oldValue;
 	}
-
+	
 	@Override
-	public V replace(K key, V newValue) {
-		// TODO Auto-generated method stub
+	public V replace(K key, V newValue) 
+	{
+		Pair<K, V> pair = new Pair<K, V>(key, newValue);
+		LinkedList<Pair<K,V>> list = hashtable[hash(key)];
+		
+		//if list exists and contains the same key
+		if(list != null)
+		{
+			if(list.contains(pair))
+			
+				return put(key, newValue);
+		}
+		
+		//returns null otherwise
 		return null;
 	}
 
 	@Override
-	public V get(K key) {
-		// TODO Auto-generated method stub
+	public V get(K key) 
+	{
+		Pair<K, V> pair = new Pair<K, V>(key, null);
+		LinkedList<Pair<K,V>> list = hashtable[hash(key)];
+		
+		//if there is a matching key in this list
+		if(list != null)
+		{
+			if(list.contains(pair))
+			{
+				int index = list.indexOf(pair);
+				return list.get(index).getValue();
+			}
+		}
 		return null;
 	}
 
 	@Override
-	public V remove(K key) {
-		// TODO Auto-generated method stub
+	public V remove(K key) 
+	{
+		Pair<K, V> pair = new Pair<K, V>(key, null);
+		LinkedList<Pair<K,V>> list = hashtable[hash(key)];
+		
+		//if there is a matching key in this list
+		if(list != null)
+		{
+			if(list.contains(pair))
+			{
+				int index = list.indexOf(pair);
+				V pairVal =  list.get(index).getValue();
+				list.remove(index);
+				size--;
+				return pairVal;
+			}
+		}
+		
 		return null;
 	}
 	
