@@ -8,5 +8,10 @@ public class HashMapDemo
 		
 		map.put("first", 1);
 		System.out.println(map.get("first"));
+		System.out.println(map.replace("first", 2));
+		System.out.println(map.get("first"));
+		System.out.println(map.remove("first"));
+		System.out.println(map.get("first"));
+		
 	}
 }

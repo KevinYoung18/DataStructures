@@ -5,6 +5,7 @@ import java.util.LinkedList;
 public class HashMap<K, V> implements Hashtable<K, V>
 {
 
+	//TODO change to private
 	private int mapSize;
 	private int size = 0;
 	private LinkedList<Pair<K,V>>[] hashtable;
@@ -26,28 +27,26 @@ public class HashMap<K, V> implements Hashtable<K, V>
 	{
 		Pair<K, V> pair = new Pair<K, V>(key, value);
 		V oldValue = null;
-		LinkedList<Pair<K,V>> list = hashtable[hash(key)];
 		
 		//create list if none exists at this index
-		if(list == null) 
+		if(hashtable[hash(key)] == null) 
 		{
-			list = new LinkedList<Pair<K,V>>();
+			hashtable[hash(key)] = new LinkedList<Pair<K,V>>();
 		}
 		else
 		{
+		
 			//if there is a matching key in this list
-			if(list.contains(pair))
+			if(hashtable[hash(key)].contains(pair))
 			{
-				int index = list.indexOf(pair);
-				oldValue = list.get(index).getValue();
-				list.remove(index);
-			}
-			else 
-			{
-				size++;
+				int index = hashtable[hash(key)].indexOf(pair);
+				oldValue = hashtable[hash(key)].get(index).getValue();
+				hashtable[hash(key)].remove(index);
+				size--;
 			}
 		}
-		list.add(pair);//add pair to list
+		hashtable[hash(key)].add(pair);
+		size++;
 		
 		
 		return oldValue;
@@ -117,6 +116,7 @@ public class HashMap<K, V> implements Hashtable<K, V>
 		return key.hashCode() % mapSize;
 	}
 	
+	//class for key value pairs
 	private class Pair<K, V>
 	{
 		private K key;
